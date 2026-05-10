@@ -1,0 +1,29 @@
+# env
+.env
+.env.local
+
+# Go
+/bin/
+/tmp/
+*.exe
+*.test
+*.out
+
+# Node / frontend
+node_modules/
+dist/
+build/
+.next/
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+config.txt
