@@ -1,13 +1,17 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http" 
+	"fmt"
+	"log"
+	"net/http"
 
-    "socialai/handler"   
+	"socialai/handler"
+	"socialai/repository"
 )
 func main() {
     fmt.Println("started-service")
+
+    repository.InitElasticsearchBackend()
+
     log.Fatal(http.ListenAndServe(":8080", handler.InitRouter()))
 }
