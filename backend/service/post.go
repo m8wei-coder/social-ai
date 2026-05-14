@@ -1,6 +1,7 @@
 package service
 
 import (
+	"mime/multipart"
 	"reflect"
 	"socialai/constants"
 	"socialai/model"
@@ -21,6 +22,8 @@ func SearchPostsByUser(user string) ([]model.Post, error) {
 
    return getPostFromSearchResult(searchResult), nil
 }
+
+// TODO: add search by user and keywords (Boolean query)
 
 func SearchPostsByKeywords(keywords string) ([]model.Post, error) {
    //option1:return nothing
@@ -54,4 +57,16 @@ func getPostFromSearchResult(searchResult *elastic.SearchResult) []model.Post {
        posts = append(posts, p)
    }
    return posts
+}
+
+func SavePost(post *model.Post, file multipart.File) error {
+	// 1. save file to GCS and get the URL
+	url, err := repository.GCSBackend.SaveToGCS(file, post.Id)
+	if err != nil {
+		return err
+	}
+	// 2. set the URL to post
+	post.Url = url
+	// 3. save post to ES
+	return repository.ESBackend.SaveToES(post, constants.POST_INDEX, post.Id)
 }
