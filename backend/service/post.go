@@ -59,6 +59,7 @@ func getPostFromSearchResult(searchResult *elastic.SearchResult) []model.Post {
    return posts
 }
 
+// not atomic
 func SavePost(post *model.Post, file multipart.File) error {
 	// 1. save file to GCS and get the URL
 	url, err := repository.GCSBackend.SaveToGCS(file, post.Id)
@@ -69,4 +70,8 @@ func SavePost(post *model.Post, file multipart.File) error {
 	post.Url = url
 	// 3. save post to ES
 	return repository.ESBackend.SaveToES(post, constants.POST_INDEX, post.Id)
+    // if error(latency)
+    // 1. retry: save to GCS 3 times
+    // 2. roll back: delete from GCS
+    // if GCS fail: add a offline cleanup at end of day
 }

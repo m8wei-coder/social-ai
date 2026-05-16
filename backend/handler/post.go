@@ -4,27 +4,63 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"socialai/model"
 	"socialai/service"
+
+	"github.com/pborman/uuid"
+)
+
+var (
+    mediaTypes = map[string]string{
+       ".jpeg": "image",
+       ".jpg":  "image",
+       ".gif":  "image",
+       ".png":  "image",
+       ".mov":  "video",
+       ".mp4":  "video",
+       ".avi":  "video",
+       ".flv":  "video",
+       ".wmv":  "video",
+    }
 )
 
 // use the pointer to save memory and avoid unnecessary copying of data
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
-	// 1. Process request: Decode the JSON body into the struct
+    fmt.Println("Received one upload request")
+	// 1. Process request: Multipart text+file -> Post+file
 
-	fmt.Println("Received one upload request")
-    decoder := json.NewDecoder(r.Body)
-    var p model.Post
-    if err := decoder.Decode(&p); err != nil {
-        panic(err)
+    p := model.Post{
+       Id:      uuid.New(),
+       User:    r.FormValue("user"),
+       Message: r.FormValue("message"),
     }
 
-	// 2. Business logic
-	// TODO
+    file, header, err := r.FormFile("media_file")
+    if err != nil {
+       http.Error(w, "Media file is not available", http.StatusBadRequest)
+       fmt.Printf("Media file is not available %v\n", err)
+       return
+    }
 
-	// 3. Respond to the client
-	fmt.Fprintf(w, "Post received: %s\n", p.Message)
+    // p.type, header->suffix->type
+    suffix := filepath.Ext(header.Filename) // -> .jpg .avi .mp4
+    if t, ok := mediaTypes[suffix]; ok {
+        p.Type = t
+    } else {
+        p.Type = "unknown" // -> error out
+    }
+
+    err = service.SavePost(&p, file)
+    if err != nil {
+       http.Error(w, "Failed to save post to backend", http.StatusInternalServerError)
+       fmt.Printf("Failed to save post to backend %v\n", err)
+       return
+    }
+
+	// 3. construct response
+	fmt.Println("Post is saved successfully.")
 
 }
 
