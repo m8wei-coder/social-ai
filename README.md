@@ -109,6 +109,20 @@ Install Elasticsearch Go client:
 go get github.com/olivere/elastic/v7
 ```
 
+```bash
+go get github.com/pborman/uuid
+go get cloud.google.com/go/storage
+```
+
+```bash
+go get github.com/form3tech-oss/jwt-go
+go get github.com/auth0/go-jwt-middleware
+```
+
+```bash
+go get github.com/gorilla/handlers
+```
+
 After installing dependencies, run:
 
 ```bash

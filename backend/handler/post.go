@@ -8,6 +8,7 @@ import (
 	"socialai/model"
 	"socialai/service"
 
+    jwt "github.com/form3tech-oss/jwt-go"
 	"github.com/pborman/uuid"
 )
 
@@ -31,9 +32,13 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Println("Received one upload request")
 	// 1. Process request: Multipart text+file -> Post+file
 
+    token := r.Context().Value("user") // user:token <- jwt middleware
+    claims := token.(*jwt.Token).Claims
+    username := claims.(jwt.MapClaims)["username"]
+
     p := model.Post{
        Id:      uuid.New(),
-       User:    r.FormValue("user"),
+       User:    username.(string),
        Message: r.FormValue("message"),
     }
 
