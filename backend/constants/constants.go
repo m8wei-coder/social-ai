@@ -6,7 +6,7 @@ const (
     ES_URL = "http://10.138.0.2:9200"
     ES_USERNAME = "ming"
     ES_PASSWORD = "welcome"
-    GCS_BUCKET = "image_and_video_bucket"
+    GCS_BUCKET = "socialai_20260518"
 )
 
 
