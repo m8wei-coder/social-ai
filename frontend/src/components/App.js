@@ -1,26 +1,33 @@
 import React, { useState } from "react";
+import ResponsiveAppBar from "./ResponsiveAppBar";
 import Main from "./Main";
 
 import { TOKEN_KEY } from "../constants";
 
-const App = (props) => {
-    // TODO: check if token is expired
-    // option1: ttl or exp time
-    // option2: call backend to check if token is valid
-    const [isLoggedIn, setIsLoggedIn] = useState(
-      localStorage.getItem(TOKEN_KEY) ? true : false
-    );
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem(TOKEN_KEY) ? true : false
+  );
 
-    const loggedIn = (token) => {
-      if (token) {
-        localStorage.setItem(TOKEN_KEY, token);
-        setIsLoggedIn(true);
-      }
+  const logout = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    setIsLoggedIn(false);
+  };
 
+  const loggedIn = (token) => {
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      setIsLoggedIn(true);
     }
-    return <div className="App">
+  };
+
+  return (
+    <div className="App">
+      <ResponsiveAppBar isLoggedIn={isLoggedIn} handleLogout={logout} />
       <Main isLoggedIn={isLoggedIn} handleLoggedIn={loggedIn} />
-    </div>;
+    </div>
+  );
 }
 
-export default App
+export default App;
+

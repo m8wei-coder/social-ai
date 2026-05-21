@@ -1,5 +1,5 @@
 export const TOKEN_KEY = "token";
-export const BASE_URL = "https://XXX.uw.r.appspot.com";
+export const BASE_URL = "https://socialai-496804.uw.r.appspot.com";
 export const SEARCH_KEY = {
     all: 0,
     keyword: 1,

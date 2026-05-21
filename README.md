@@ -14,6 +14,11 @@ Social AI is a full-stack web application with a Go backend, React frontend, and
 
 - React
 
+- Material UI
+```bash
+npm install @mui/material @mui/styled-engine-sc styled-components @mui/icons-material @emotion/react @emotion/styled
+```
+
 ### Database
 
 - Elasticsearch 7.x
