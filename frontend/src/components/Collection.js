@@ -5,11 +5,12 @@ import axios from "axios";
 import SearchBar from "./SearchBar";
 import { SEARCH_KEY, BASE_URL, TOKEN_KEY } from "../constants";
 import PhotoGallery from "./PhotoGallery";
+import CreatePostButton from "./CreatePostButton";
 
 const { TabPane } = Tabs;
 
 function Collection(props) {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPost] = useState([]);
   const [activeTab, setActiveTab] = useState("image");
   const [searchOption, setSearchOption] = useState({
     type: SEARCH_KEY.all,
@@ -19,10 +20,10 @@ function Collection(props) {
   const handleSearch = (option) => setSearchOption(option);
 
   useEffect(() => {
-    fetchPosts(searchOption);
+    fetchPost(searchOption);
   }, [searchOption]);
 
-  const fetchPosts = (option) => {
+  const fetchPost = (option) => {
     const { type, keyword } = option;
     let url = "";
 
@@ -45,7 +46,7 @@ function Collection(props) {
     axios(opt)
       .then((res) => {
         if (res.status === 200) {
-          setPosts(res.data);
+          setPost(res.data);
         }
       })
       .catch((err) => {
@@ -96,6 +97,15 @@ function Collection(props) {
     }
   };
 
+  const showPost = (type) => {
+    setActiveTab(type);
+    setTimeout(() => {
+      setSearchOption({ type: SEARCH_KEY.all, keyword: "" });
+    }, 3000);
+  };
+
+  const operations = <CreatePostButton onShowPost={showPost} />;
+
   return (
     <div className="home">
       <SearchBar handleSearch={handleSearch} />
@@ -104,6 +114,7 @@ function Collection(props) {
           onChange={(key) => setActiveTab(key)}
           defaultActiveKey="image"
           activeKey={activeTab}
+          tabBarExtraContent={operations}
         >
           <TabPane tab="Images" key="image">
             {renderPosts("image")}
