@@ -50,8 +50,8 @@ function Collection(props) {
         }
       })
       .catch((err) => {
-        message.error("Fetch posts failed!");
-        console.log("fetch posts failed: ", err.message);
+        message.error("Fetch posts failed");
+        console.log("Fetch posts failed: ", err.message);
       });
   };
 

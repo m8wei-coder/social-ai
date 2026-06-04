@@ -3,6 +3,7 @@ import { Form, Upload, Input } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
 export const PostForm = forwardRef((props, formRef) => {
+  //TODO: mobile responsiveness
   const formItemLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
@@ -37,6 +38,7 @@ export const PostForm = forwardRef((props, formRef) => {
             },
           ]}
         >
+          {/* 图片/视频检查 */}
           <Upload.Dragger name="files" beforeUpload={() => false}>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
